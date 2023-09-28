@@ -1,0 +1,84 @@
+1.CREATE TABLE STUD
+ create table stud(id int primary key,name char[30]);
+ insert into stud values(1,"om");
+ insert into stud values(2,"sai");
+ insert into stud values(3,"ram");
+ insert into stud values(4,"hanuman"),(5,"shiv"),(6,"sita"),(7,"ganesh"),(8,"dev"),(9,"parvati"),(10,"krishna");
+ 
+ .mode table
+ select * from stud;
+ +----+---------+
+ | id |  name   |
+ +----+---------+
+ | 1  | om      |
+ | 2  | sai     |
+ | 3  | ram     |
+ | 4  | hanuman |
+ | 5  | shiv    |
+ | 6  | sita    |
+ | 7  | ganesh  |
+ | 8  | dev     |
+ | 9  | parvati |
+ | 10 | krishna |
+ +----+---------+
+
+2.create table stud_details(id references stud(id),name char[30],city char[35],mobile_no int);
+ insert into stud_details values(1,"om","buhari",9173641047);
+ insert into stud_details values(2,"sai",bardoli",9988776655);
+ insert into stud_details values(3,"bhargav","surat",9955443322),(4,"parth","kharvasha",8866445533),(5,"sujal","surat",6644553311);
+ insert into stud_details values(6,"dhruv","bardoli",8800996677),(7,"krunal","bardoli",9900668879),(8,"param","surat",7766554433);
+ insert into stud_details values(9,"roshan","vyra",9900887766),(10,"rajdeep","bardoli",9955664477);
+ 
+ select * from stud_details;
+ +----+---------+-----------+------------+
+ | id |  name   |   city    | mobile_no  |
+ +----+---------+-----------+------------+
+ | 1  | om      | buhari    | 9173641047 |
+ | 2  | sai     | bardoli   | 9988776655 |
+ | 3  | bhargav | surat     | 9955443322 |
+ | 4  | parth   | kharvasha | 8866445533 |
+ | 5  | sujal   | surat     | 6644553311 |
+ | 6  | dhruv   | bardoli   | 8800996677 |
+ | 7  | krunal  | bardoli   | 9900668879 |
+ | 8  | param   | surat     | 7766554433 |
+ | 9  | roshan  | vyra      | 9900887766 |
+ | 10 | rajdeep | bardoli   | 9955664477 |
+ +----+---------+-----------+------------+
+
+1.select * from stud_details where city="surat";
+ +----+---------+-------+------------+
+ | id |  name   | city  | mobile_no  |
+ +----+---------+-------+------------+
+ | 3  | bhargav | surat | 9955443322 |
+ | 5  | sujal   | surat | 6644553311 |
+ | 8  | param   | surat | 7766554433 |
+ +----+---------+-------+------------+
+
+2.select * from stud_details where city like "b%";
+ +----+---------+---------+------------+
+ | id |  name   |  city   | mobile_no  |
+ +----+---------+---------+------------+
+ | 1  | om      | buhari  | 9173641047 |
+ | 2  | sai     | bardoli | 9988776655 |
+ | 6  | dhruv   | bardoli | 8800996677 |
+ | 7  | krunal  | bardoli | 9900668879 |
+ | 10 | rajdeep | bardoli | 9955664477 |
+ +----+---------+---------+------------+
+
+3.UPDATE stud_details SET mobile_no=1100223344 WHERE city="surat";
+ +----+---------+-----------+------------+
+| id |  name   |   city    | mobile_no  |
++----+---------+-----------+------------+
+| 1  | om      | buhari    | 9173641047 |
+| 2  | sai     | bardoli   | 9988776655 |
+| 3  | bhargav | surat     | 1100223344 |
+| 4  | parth   | kharvasha | 8866445533 |
+| 5  | sujal   | surat     | 1100223344 |
+| 6  | dhruv   | bardoli   | 8800996677 |
+| 7  | krunal  | bardoli   | 9900668879 |
+| 8  | param   | surat     | 1100223344 |
+| 9  | roshan  | vyra      | 9900887766 |
+| 10 | rajdeep | bardoli   | 9955664477 |
++----+---------+-----------+------------+
+
+ 
