@@ -1,0 +1,102 @@
+import sqlite3
+
+conn = sqlite3.connect('contact_manager.db')
+cursor = conn.cursor()
+
+# Create the contact table
+cursor.execute('''
+    CREATE TABLE IF NOT EXISTS contact (
+        id INTEGER PRIMARY KEY,
+        fname TEXT,
+        lname TEXT,
+        contact TEXT,
+        email TEXT,
+        city TEXT
+    )
+''')
+
+# Create the log table
+cursor.execute('''
+    CREATE TABLE IF NOT EXISTS logtable (
+        id INTEGER PRIMARY KEY,
+        operation TEXT,
+        details TEXT,
+        timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+''')
+
+# Create trigger to validate input on the contact table
+cursor.execute('''
+    CREATE TRIGGER validate_contact_input
+    BEFORE INSERT ON contact
+    BEGIN
+        -- Your validation logic here
+    END;
+''')
+
+# User-defined function to insert contact
+def insert_contact(fname, lname, contact, email, city):
+    cursor.execute('''
+        INSERT INTO contact (fname, lname, contact, email, city)
+        VALUES (?, ?, ?, ?, ?)
+    ''', (fname, lname, contact, email, city))
+    conn.commit()
+
+    details = f"Inserted: {fname} {lname}, Contact: {contact}"
+    cursor.execute('INSERT INTO logtable (operation, details) VALUES (?, ?)', ('insert', details))
+    conn.commit()
+
+# User-defined function to update contact
+def update_contact(contact_id, new_contact):
+    cursor.execute('SELECT * FROM contact WHERE id = ?', (contact_id,))
+    old_contact = cursor.fetchone()
+
+    if old_contact:
+        cursor.execute('''
+            UPDATE contact
+            SET contact = ?
+            WHERE id = ?
+        ''', (new_contact, contact_id))
+        conn.commit()
+
+        details = f"Updated contact {old_contact[3]} to {new_contact}"
+        cursor.execute('INSERT INTO logtable (operation, details) VALUES (?, ?)', ('update', details))
+        conn.commit()
+
+# User-defined function to delete contact
+def delete_contact(contact_id):
+    cursor.execute('SELECT * FROM contact WHERE id = ?', (contact_id,))
+    deleted_contact = cursor.fetchone()
+
+    if deleted_contact:
+        cursor.execute('DELETE FROM contact WHERE id = ?', (contact_id,))
+        conn.commit()
+
+        details = f"Deleted: {deleted_contact[1]} {deleted_contact[2]}, Contact: {deleted_contact[3]}"
+        cursor.execute('INSERT INTO logtable (operation, details) VALUES (?, ?)', ('delete', details))
+        conn.commit()
+
+# User-defined function to search contact
+def search_contact(keyword):
+    cursor.execute('''
+        SELECT * FROM contact
+        WHERE fname LIKE ? OR lname LIKE ? OR contact LIKE ? OR email LIKE ? OR city LIKE ?
+    ''', (f'%{keyword}%', f'%{keyword}%', f'%{keyword}%', f'%{keyword}%', f'%{keyword}%'))
+    result = cursor.fetchall()
+    return result
+
+# Insert a sample contact
+insert_contact('om','sai','1234567890', 'om21@gmail.com','buhari')
+
+# Update the contact
+update_contact(1, '9876543210')
+
+# Delete the contact
+delete_contact(1)
+
+# Search for contacts
+search_results = search_contact('sai')
+print(search_results)
+
+# Close the connection
+conn.close()
