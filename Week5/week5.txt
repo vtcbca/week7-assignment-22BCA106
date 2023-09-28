@@ -1,0 +1,67 @@
+import csv
+
+# Function to get student records from user input
+def get_student_record():
+    sid = input("Enter Student ID: ")
+    sname = input("Enter Student Name: ")
+    city = input("Enter City: ")
+    contact = input("Enter Contact: ")
+    return [sid, sname, city, contact]
+
+# Create a list of student records
+records = [
+    ["1", "om", "buhari", "9173641047"],
+    ["2", "rudar", "sakii", "2233445566"],
+    ["3", "parth", "karan", "9988776655"],
+    ["4", "sujal", "kharvasha", "1122334455"],
+    ["5", "bhargav", "bardoli", "3377889900"]
+]
+
+# Get 5 student records from user input
+for record in range(5):
+    records.append(get_student_record())
+
+Enter Student ID:  6
+Enter City:  rajkot
+Enter Student Name:  sai
+Enter Contact:  3344556677
+Enter Student ID:  7
+Enter Student Name:  ram
+Enter City:  dwarka
+Enter Contact:  5544332211
+Enter Student ID:  8
+Enter Student Name:  sita
+Enter City:  ramnagr
+Enter Contact:  6677554488
+Enter Student ID:  9
+Enter Student Name:  hanuman
+Enter City:  bajrangnagr
+Enter Contact:  4455667788
+Enter Student ID:  10
+Enter Student Name:  krishna
+Enter City:  betdwarka
+Enter Contact:  5566778899
+
+
+# Write records to student.csv file
+with open("student.csv", mode="w", newline="") as file:
+    writer = csv.writer(file)
+    writer.writerow(["sid", "sname", "city", "contact"])
+    writer.writerows(records)
+    print("CSV file 'student.csv' created successfully.")
+
+CSV file 'student.csv' created successfully.
+
+
+# Read and print records from student.csv file
+with open("student.csv", mode="r") as file:
+    reader = csv.reader(file)
+    for record in reader:
+        print(", ".join(row))
+
+sid, sname, city, contact
+1, om, buhari, 9173641047
+2, rudar, sakii,2233445566
+3, parth, karan,9988776655 
+4, sujal, kharvasha,1122334455 
+5, bhargav, bardoli,3377889900
